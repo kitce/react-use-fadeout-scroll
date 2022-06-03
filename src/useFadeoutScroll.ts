@@ -1,6 +1,5 @@
-import type React from 'react';
-import { useMemo, useRef } from 'react';
-import { useScroll } from 'react-use';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Direction, getLinearGradient } from './helpers';
 
 module UseFadeoutScroll {
   /**
@@ -8,16 +7,21 @@ module UseFadeoutScroll {
    */
   export interface IOptions {
     /** 
-     * fading rate, 0-1
-     * @default 1
+     * horizontal fading rate, 0-1, set 0 to disable
+     * @default 0
      */
-    fadingRate?: number;
+    xFadingRate?: number;
+    /** 
+     * vertical fading rate, 0-1, set 0 to disable
+     * @default 0
+     */
+    yFadingRate?: number;
   }
   /**
    * `useFadeoutScroll` hook result
    */
   export type TResult<T> = [
-    /** the ref object to be attached to the target element */
+    /** the ref object to be attached to the scroll container */
     React.RefObject<T>,
     /** the style to be applied to the scroll container */
     React.CSSProperties
@@ -25,30 +29,50 @@ module UseFadeoutScroll {
 }
 
 const useFadeoutScroll = <T extends HTMLElement> (options: UseFadeoutScroll.IOptions): UseFadeoutScroll.TResult<T> => {
-  const { fadingRate = 1 } = options;
+  const { xFadingRate = 0, yFadingRate = 0 } = options;
 
   const ref = useRef<T>(null);
-  const { y } = useScroll(ref);
+  const [style, setStyle] = useState<React.CSSProperties>({});
 
-  const style = useMemo<React.CSSProperties>(() => {
+  const handleScroll = useCallback(() => {
     if (ref.current) {
-      const { clientHeight, scrollHeight } = ref.current;
-      const gradients: string[] = [];
-      if (y > 0) {
-        gradients.push('transparent 0%');
-        gradients.push(`black ${((y / scrollHeight) * fadingRate) * 100}%`);
+      const { clientHeight, clientWidth, scrollTop, scrollLeft, scrollHeight, scrollWidth } = ref.current;
+      const maskImages: string[] = [];
+      /* horizontal */
+      if (xFadingRate > 0) {
+        const linearGradient = getLinearGradient(Direction.Horizontal, xFadingRate, scrollLeft, scrollWidth, clientWidth);
+        if (linearGradient) {
+          maskImages.push(linearGradient);
+        }
       }
-      if ((scrollHeight - clientHeight) > y) {
-        gradients.push(`black ${(1 - ((scrollHeight - clientHeight - y) / scrollHeight) * fadingRate) * 100}%`);
-        gradients.push('transparent 100%');
+      /* vertical */
+      if (yFadingRate > 0) {
+        const linearGradient = getLinearGradient(Direction.Vertical, yFadingRate, scrollTop, scrollHeight, clientHeight);
+        if (linearGradient) {
+          maskImages.push(linearGradient);
+        }
       }
-      if (gradients.length > 0) {
-        const maskImage = `linear-gradient(${gradients.join(', ')})`;
-        return { WebkitMaskImage: maskImage, maskImage };
-      }
+      const maskImage = maskImages.join(', ');
+      setStyle({
+        WebkitMaskImage: maskImage,
+        maskImage
+      });
+    } else {
+      setStyle({});
     }
-    return {};
-  }, [fadingRate, y]);
+  }, [xFadingRate, yFadingRate]);
+
+  useEffect(() => {
+    ref.current?.addEventListener('scroll', handleScroll);
+    return () => {
+      ref.current?.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll]);
+
+  /* apply the effect on mount */
+  useEffect(() => {
+    handleScroll();
+  }, []);
 
   return [ref, style];
 };

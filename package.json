@@ -1,13 +1,14 @@
 {
   "name": "@kitce/react-use-fadeout-scroll",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "React hook to apply fadeout effect to scroll container",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
     "clean": "rm -rf dist",
     "prebuild": "pnpm clean",
-    "build": "pnpm prebuild && tsc"
+    "build": "pnpm prebuild && tsc",
+    "prepublish": "pnpm build"
   },
   "keywords": [
     "react",
@@ -29,8 +30,5 @@
   "peerDependencies": {
     "react": "^16.8.0  || ^17.0.0 || ^18.0.0",
     "react-dom": "^16.8.0  || ^17.0.0 || ^18.0.0"
-  },
-  "dependencies": {
-    "react-use": "^17.4.0"
   }
 }
