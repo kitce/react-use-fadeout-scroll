@@ -16,16 +16,21 @@ module UseFadeoutScroll {
    */
   interface IOptions {
     /**
-     * fading rate, 0-1
-     * @default 1
+     * horizontal fading rate, 0-1, set 0 to disable
+     * @default 0
      */
-    fadingRate?: number;
+    xFadingRate?: number;
+    /**
+     * vertical fading rate, 0-1, set 0 to disable
+     * @default 0
+     */
+    yFadingRate?: number;
   }
   /**
    * `useFadeoutScroll` hook result
    */
   type TResult<T> = [
-    /** the ref object to be attached to the target element */
+    /** the ref object to be attached to the scroll container */
     React.RefObject<T>,
     /** the style to be applied to the scroll container */
     React.CSSProperties
@@ -40,7 +45,7 @@ const useFadeoutScroll: <T extends HTMLElement>(options: UseFadeoutScroll.IOptio
 import useFadeoutScroll from '@kitce/react-use-fadeout-scroll';
 
 const ScrollContainer = () => {
-  const [ref, style] = useFadeoutScroll<HTMLDivElement>({ fadingRate: 0.3 });
+  const [ref, style] = useFadeoutScroll<HTMLDivElement>({ yFadingRate: 0.3 });
   return (
     <div ref={ref} style={style}>
       {/* very long content */}
