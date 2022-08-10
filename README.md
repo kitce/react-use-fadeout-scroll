@@ -7,38 +7,9 @@ React hook to apply fadeout effect to scroll container
 pnpm add @kitce/react-use-fadeout-scroll
 ```
 
-## Usage
+## Documentation
 
-```ts
-module UseFadeoutScroll {
-  /**
-   * `useFadeoutScroll` hook options
-   */
-  interface IOptions {
-    /**
-     * horizontal fading rate, 0-1, set 0 to disable
-     * @default 0
-     */
-    xFadingRate?: number;
-    /**
-     * vertical fading rate, 0-1, set 0 to disable
-     * @default 0
-     */
-    yFadingRate?: number;
-  }
-  /**
-   * `useFadeoutScroll` hook result
-   */
-  type TResult<T> = [
-    /** the ref object to be attached to the scroll container */
-    React.RefObject<T>,
-    /** the style to be applied to the scroll container */
-    React.CSSProperties
-  ];
-}
-
-const useFadeoutScroll: <T extends HTMLElement>(options: UseFadeoutScroll.IOptions) => UseFadeoutScroll.TResult<T>;
-```
+[Documentation](https://kitce.github.io/react-use-fadeout-scroll/)
 
 ## Example
 ```tsx
