@@ -9,7 +9,7 @@
     "prebuild": "pnpm clean",
     "build": "pnpm prebuild && tsc",
     "docs": "typedoc src/main.ts",
-    "prepublish": "pnpm build && pnpm run docs"
+    "prepublish": "pnpm build"
   },
   "keywords": [
     "react",
