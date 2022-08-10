@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Direction, getLinearGradient } from './helpers';
 
-module UseFadeoutScroll {
+export module UseFadeoutScroll {
   /**
    * `useFadeoutScroll` hook options
    */
