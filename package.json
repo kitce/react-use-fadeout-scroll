@@ -8,7 +8,8 @@
     "clean": "rm -rf dist",
     "prebuild": "pnpm clean",
     "build": "pnpm prebuild && tsc",
-    "prepublish": "pnpm build"
+    "docs": "typedoc src/main.ts",
+    "prepublish": "pnpm build && pnpm docs"
   },
   "keywords": [
     "react",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@types/react": "^18.0.10",
     "react": "^18.1.0",
+    "typedoc": "^0.23.10",
     "typescript": "^4.7.2"
   },
   "peerDependencies": {
